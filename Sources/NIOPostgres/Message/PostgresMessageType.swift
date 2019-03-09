@@ -5,7 +5,7 @@ public protocol PostgresMessageType: CustomStringConvertible {
 }
 
 extension PostgresMessageType {
-    func message() throws -> PostgresMessage {
+    public func message() throws -> PostgresMessage {
         var buffer = ByteBufferAllocator().buffer(capacity: 0)
         try self.serialize(into: &buffer)
         return .init(identifier: Self.identifier, data: buffer)

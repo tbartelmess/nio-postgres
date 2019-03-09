@@ -143,7 +143,7 @@ extension PostgresMessage {
 }
 
 extension ByteBuffer {
-    mutating func write(identifier: PostgresMessage.Identifier) {
+    public mutating func write(identifier: PostgresMessage.Identifier) {
         self.writeInteger(identifier.value)
     }
 }

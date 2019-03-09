@@ -4,7 +4,25 @@ extension PostgresMessage {
     /// First message sent from the frontend during startup.
     public struct Startup: PostgresMessageType {
         public static func parse(from buffer: inout ByteBuffer) throws -> PostgresMessage.Startup {
-            fatalError()
+            let protocolVersion = buffer.readInteger(as: Int32.self)
+            var keyValues : [String: String] = [:]
+
+            var currentKey: String?
+            while true {
+                guard let value = buffer.readNullTerminatedString() else {
+                    break
+                }
+                if value.lengthOfBytes(using: .ascii) == 0 {
+                    break
+                }
+                if let key = currentKey {
+                    keyValues[key] = value
+                    currentKey = nil
+                } else {
+                    currentKey = value
+                }
+            }
+            return Startup(protocolVersion: protocolVersion!, parameters: keyValues)
         }
         
         public static var identifier: PostgresMessage.Identifier {

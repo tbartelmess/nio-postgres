@@ -12,6 +12,9 @@ public final class PostgresMessageEncoder: MessageToByteEncoder {
         var message = message
         switch message.identifier {
         case .none: break
+        case .sslUnsupported, .sslSupported:
+            out.write(identifier: message.identifier)
+            return
         default:
             out.write(identifier: message.identifier)
         }
@@ -25,6 +28,9 @@ public final class PostgresMessageEncoder: MessageToByteEncoder {
         
         // set message size
         out.setInteger(Int32(out.writerIndex - messageSizeIndex), at: messageSizeIndex)
+    }
+    public init() {
+        
     }
 }
 

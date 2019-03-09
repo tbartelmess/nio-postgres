@@ -1,7 +1,7 @@
 import NIO
 
 extension PostgresMessage {
-    public struct ParameterStatus: CustomStringConvertible {
+    public struct ParameterStatus: PostgresMessageType, CustomStringConvertible {
         /// Parses an instance of this message type from a byte buffer.
         public static func parse(from buffer: inout ByteBuffer) throws -> ParameterStatus {
             guard let parameter = buffer.readNullTerminatedString() else {
@@ -12,7 +12,12 @@ extension PostgresMessage {
             }
             return .init(parameter: parameter, value: value)
         }
-        
+
+        public init(parameter: String, value: String) {
+            self.parameter = parameter
+            self.value = value
+        }
+
         /// The name of the run-time parameter being reported.
         public var parameter: String
         
@@ -22,6 +27,16 @@ extension PostgresMessage {
         /// See `CustomStringConvertible`.
         public var description: String {
             return "\(parameter): \(value)"
+        }
+
+        public static var identifier: PostgresMessage.Identifier {
+            return .parameterStatus
+        }
+
+        public func serialize(into buffer: inout ByteBuffer) throws {
+            buffer.writeString(parameter + "\0")
+            buffer.writeString(value + "\0")
+
         }
     }
 }

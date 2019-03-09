@@ -47,7 +47,15 @@ extension PostgresMessage {
         }
         
         public func serialize(into buffer: inout ByteBuffer) {
-            fatalError()
+            switch self {
+            case .plaintext:
+                buffer.writeInteger(Int32(3))
+            case .ok:
+                buffer.writeInteger(Int32(0))
+            case .md5(let salt):
+                buffer.writeInteger(5)
+                buffer.writeBytes(salt)
+            }
         }
     }
 }
