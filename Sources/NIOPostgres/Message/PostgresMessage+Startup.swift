@@ -1,5 +1,17 @@
 import NIO
 
+/// Extension to Int32 to extract minor/major version
+/// from the protocol version
+fileprivate extension Int32 {
+    var majorVersion: Int16 {
+        return Int16(self >> 16)
+    }
+
+    var minorVersion: Int16 {
+        return Int16(self & 0xFFFF)
+    }
+}
+
 extension PostgresMessage {
     /// First message sent from the frontend during startup.
     public struct Startup: PostgresMessageType {
@@ -45,7 +57,17 @@ extension PostgresMessage {
         /// version number (3 for the protocol described here). The least significant
         /// 16 bits are the minor version number (0 for the protocol described here).
         public var protocolVersion: Int32
-        
+
+        /// Returns the major protocol version of the protocol (upper 16 bits)
+        public var majorProtocolVersion: Int16 {
+            return protocolVersion.majorVersion
+        }
+
+        /// Returns the minor protocol version of the protocol (lower 16 bits)
+        public var minorProtocolVersion: Int16 {
+            return protocolVersion.minorVersion
+        }
+
         /// The protocol version number is followed by one or more pairs of parameter
         /// name and value strings. A zero byte is required as a terminator after
         /// the last name/value pair. Parameters can appear in any order. user is required,

@@ -55,10 +55,13 @@ class ParsingTests: XCTestCase {
     func testParseStartupMessage() {
         let startupMessage: PostgresMessage.Startup? = parseMessage(fixtureName: "startup", hasType: false)
         XCTAssertEqual(startupMessage?.protocolVersion, 196608)
+        XCTAssertEqual(startupMessage?.minorProtocolVersion, 0)
+        XCTAssertEqual(startupMessage?.majorProtocolVersion, 3)
         let parameters = startupMessage?.parameters
         XCTAssertEqual(parameters?["user"], "thomasbartelmess")
         XCTAssertEqual(parameters?["database"], "thomasbartelmess")
     }
+
 
     
 }
