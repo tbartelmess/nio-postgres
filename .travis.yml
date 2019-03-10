@@ -1,0 +1,10 @@
+dist: xenial
+language: c
+
+env:
+  SWIFT_VERSION: 5.0-DEVELOPMENT-SNAPSHOT-2019-03-06-a
+
+setup:
+  - curl -o swift.tar.gz https://swift.org/builds/swift-5.0-branch/ubuntu1604/swift-${SWIFT_VERSION}/swift${SWIFT_VERSION}-ubuntu16.04.tar.gz
+  - tar xfz swift.tar.gz
+
