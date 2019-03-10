@@ -2,11 +2,11 @@ import NIO
 
 extension PostgresMessage {
     /// Authentication request returned by the server.
-    public enum Authentication: PostgresMessageType {
+    public enum Authentication: PostgresMessageType, Equatable {
         public static var identifier: PostgresMessage.Identifier {
             return .authentication
         }
-        
+
         /// Parses an instance of this message type from a byte buffer.
         public static func parse(from buffer: inout ByteBuffer) throws -> Authentication {
             guard let type = buffer.readInteger(as: Int32.self) else {
