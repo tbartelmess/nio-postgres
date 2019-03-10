@@ -4,7 +4,10 @@ extension PostgresMessage {
     /// First message sent from the frontend during startup.
     public struct Startup: PostgresMessageType {
         public static func parse(from buffer: inout ByteBuffer) throws -> PostgresMessage.Startup {
-            let protocolVersion = buffer.readInteger(as: Int32.self)
+            guard let protocolVersion = buffer.readInteger(as: Int32.self) else {
+                throw PostgresError.protocol("Failed to read protocol version")
+            }
+
             var keyValues : [String: String] = [:]
 
             var currentKey: String?
@@ -22,7 +25,7 @@ extension PostgresMessage {
                     currentKey = value
                 }
             }
-            return Startup(protocolVersion: protocolVersion!, parameters: keyValues)
+            return Startup(protocolVersion: protocolVersion, parameters: keyValues)
         }
         
         public static var identifier: PostgresMessage.Identifier {
