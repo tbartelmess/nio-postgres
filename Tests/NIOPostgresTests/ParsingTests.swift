@@ -53,7 +53,7 @@ class ParsingTests: XCTestCase {
     }
 
     func testParseStartupMessage() {
-        let startupMessage: PostgresMessage.Startup? = parseMessage(fixtureName: "startup", hasType: false)
+        let startupMessage: PostgresMessage.Startup? = parseMessage(fixtureName: "Startup", hasType: false)
         XCTAssertEqual(startupMessage?.protocolVersion, 196608)
         XCTAssertEqual(startupMessage?.minorProtocolVersion, 0)
         XCTAssertEqual(startupMessage?.majorProtocolVersion, 3)
@@ -62,6 +62,33 @@ class ParsingTests: XCTestCase {
         XCTAssertEqual(parameters?["database"], "thomasbartelmess")
     }
 
+    func testParseParameterStatus() {
+        let parameterStatusMessage: PostgresMessage.ParameterStatus? = parseMessage(fixtureName: "ParameterStatus")
+        XCTAssertEqual(parameterStatusMessage?.parameter, "server_version")
+        XCTAssertEqual(parameterStatusMessage?.value, "10.5")
+    }
 
-    
+    func testAuthorizationRequestOK() {
+        let authMessage: PostgresMessage.Authentication? = parseMessage(fixtureName: "AuthenticationRequestOK")
+        guard let message = authMessage else {
+            return
+        }
+        XCTAssertEqual(message, PostgresMessage.Authentication.ok)
+    }
+
+    func testAuthorizationRequestCleartextPassword() {
+        let authMessage: PostgresMessage.Authentication? = parseMessage(fixtureName: "AuthenticationRequestCleartextPassword")
+        guard let message = authMessage else {
+            return
+        }
+        XCTAssertEqual(message, PostgresMessage.Authentication.plaintext)
+    }
+
+    func testAuthorizationRequestMD5Password() {
+        let authMessage: PostgresMessage.Authentication? = parseMessage(fixtureName: "AuthenticationRequestMD5Password")
+        guard let message = authMessage else {
+            return
+        }
+        XCTAssertEqual(message, PostgresMessage.Authentication.md5([40,155,15,168]))
+    }
 }

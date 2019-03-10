@@ -23,6 +23,7 @@ extension NIOPostgresTests {
         ("testSimpleQueryVersion", testSimpleQueryVersion),
         ("testSQLError", testSQLError),
         ("testUUID", testUUID),
+        ("testAuthorizationRequestMD5Password", testAuthorizationRequestMD5Password)
     ]
 }
 
