@@ -7,7 +7,11 @@ extension PostgresMessage {
         public static var identifier: PostgresMessage.Identifier {
             return .rowDescription
         }
-        
+
+        public init(fields: [Field]) {
+            self.fields = fields
+        }
+
         /// Describes a single field returns in a `RowDescription` message.
         public struct Field: CustomStringConvertible {
             static func parse(from buffer: inout ByteBuffer) throws -> Field {
@@ -42,7 +46,17 @@ extension PostgresMessage {
                     formatCode: formatCode
                 )
             }
-            
+
+            init(name: String, tableOID: UInt32, columnAttributeNumber: Int16, dataType: PostgresDataType, dataTypeSize: Int16, dataTypeModifier: Int32, formatCode: PostgresFormatCode) {
+                self.name = name
+                self.tableOID = tableOID
+                self.columnAttributeNumber = columnAttributeNumber
+                self.dataType = dataType
+                self.dataTypeSize = dataTypeSize
+                self.dataTypeModifier = dataTypeModifier
+                self.formatCode = formatCode
+            }
+
             /// The field name.
             public var name: String
             
