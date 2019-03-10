@@ -7,4 +7,7 @@ env:
 setup:
   - curl -o swift.tar.gz https://swift.org/builds/swift-5.0-branch/ubuntu1604/swift-${SWIFT_VERSION}/swift${SWIFT_VERSION}-ubuntu16.04.tar.gz
   - tar xfz swift.tar.gz
+script:
+  - curl -o swift.tar.gz https://swift.org/builds/swift-5.0-branch/ubuntu1604/swift-${SWIFT_VERSION}/swift${SWIFT_VERSION}-ubuntu16.04.tar.gz
+  - tar xfz swift.tar.gz
 
