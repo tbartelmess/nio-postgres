@@ -4,7 +4,10 @@ extension PostgresMessage {
     /// Identifies the message as a simple query.
     public struct SimpleQuery: PostgresMessageType {
         public static func parse(from buffer: inout ByteBuffer) throws -> PostgresMessage.SimpleQuery {
-            fatalError()
+            guard let query = buffer.readNullTerminatedString() else {
+                throw PostgresError.protocol("Failed to read query string")
+            }
+            return .init(string: query)
         }
         
         public static var identifier: PostgresMessage.Identifier {
