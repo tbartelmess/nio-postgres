@@ -334,4 +334,16 @@ final class NIOPostgresTests: XCTestCase {
            XCTAssertEqual(error.code, .invalid_password)
         }
     }
+
+    func testPreparedQuery() throws {
+        let conn = try PostgresConnection.test(on: eventLoop).wait()
+
+        let prepared = try conn.prepare(query: "SELECT 1 as one;").wait()
+        let rows = try prepared.execute().wait()
+
+        XCTAssertEqual(rows.count, 1)
+        let value = rows[0].column("one")
+        XCTAssertEqual(value?.int, 1)
+
+    }
 }
