@@ -1,6 +1,6 @@
 import Foundation
 
-extension PostgresDatabase {
+extension PostgresClient {
 
     public func prepare(query: String) -> EventLoopFuture<PreparedQuery> {
         let name = "nio-postgres-\(UUID().uuidString)"
@@ -14,11 +14,11 @@ extension PostgresDatabase {
 
 
 public class PreparedQuery {
-    let database: PostgresDatabase
+    let database: PostgresClient
     let name: String
     let rowLookupTable: PostgresRow.LookupTable
 
-    init(database: PostgresDatabase, name: String, rowDescription: PostgresRow.LookupTable) {
+    init(database: PostgresClient, name: String, rowDescription: PostgresRow.LookupTable) {
         self.database = database
         self.name = name
         self.rowLookupTable = rowDescription
