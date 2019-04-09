@@ -1,4 +1,5 @@
 import Foundation
+import NIOFoundationCompat
 
 extension PostgresData {
     public var data: Data? {
