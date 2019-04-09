@@ -96,6 +96,10 @@ extension PostgresMessage {
             /// Routine: the name of the source-code routine reporting the error.
             case routine = 0x52 /// R
         }
+
+        public init(fields: [Field: String]) {
+            self.fields = fields
+        }
         
         /// The diagnostic messages.
         public var fields: [Field: String]
@@ -106,7 +110,11 @@ extension PostgresMessage {
         }
         
         public func serialize(into buffer: inout ByteBuffer) throws {
-            fatalError()
+            for field in fields {
+                buffer.writeInteger(field.key.rawValue)
+                buffer.write(nullTerminated: field.value)
+            }
+            buffer.writeInteger(0)
         }
     }
 }
